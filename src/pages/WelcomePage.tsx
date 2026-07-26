@@ -6,6 +6,7 @@ import {
 import { useApp } from '../context/AppContext';
 import type { Role } from '../data/mockData';
 import { sampleFields } from '../data/mockData';
+import { DocExcerpt } from '../components/FieldReview';
 
 // The K-1 field — genuinely ambiguous (76% confidence, two plausible readings)
 // rather than a clean 98% extraction. A trust story is more convincing when
@@ -45,6 +46,14 @@ function LiveFieldDemo() {
       </div>
       {open && (
         <div className="border-t border-slate-100 bg-slate-50 p-4 space-y-3">
+          {demoField.source && (
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
+                Straight from the document — {demoField.source.docName}
+              </p>
+              <DocExcerpt docType="Schedule-K1" src={demoField.source} />
+            </div>
+          )}
           <p className="text-xs text-slate-600 leading-relaxed">{demoField.aiMeta?.reasoning}</p>
           {demoField.aiMeta?.alternativeValues && (
             <div className="space-y-1.5">

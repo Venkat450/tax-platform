@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useApp, ROLE_OPTIONS } from '../context/AppContext';
 import { scopedReturnsForRole, stageConfig, urgencyConfig } from '../data/mockData';
+import { useEscapeToClose } from '../lib/useEscapeToClose';
 import type { Role } from '../data/mockData';
 
 const NAV: Record<Role, Array<{ icon: React.ElementType; label: string; path: string }>> = {
@@ -82,6 +83,7 @@ function initials(name: string) {
 function CommandPalette({ role, userName, onClose }: { role: Role; userName: string; onClose: () => void }) {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
+  useEscapeToClose(onClose);
 
   const results = useMemo(() => {
     const scoped = scopedReturnsForRole(role, userName);

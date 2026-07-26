@@ -8,6 +8,7 @@ import { useApp } from '../context/AppContext';
 import { useReturnsData } from '../context/ReturnsDataContext';
 import { messageRoleFor, verifyField, approveField, rejectField, overrideField, buildClarificationThread } from '../lib/fieldActions';
 import { FIELD_STATE_ICONS } from '../lib/fieldIcons';
+import { useEscapeToClose } from '../lib/useEscapeToClose';
 import {
   allReturns, sampleReturn, alexPersonalReturn, stageConfig, STAGES, fieldStateConfig, urgencyConfig,
 } from '../data/mockData';
@@ -353,6 +354,7 @@ function DocumentList({ documents, fields, highlightId, blockers, onOpenDoc }: {
 function DocumentViewerModal({ doc, fields, onClose, onGoToField }: {
   doc: TaxDocument; fields: ReturnField[]; onClose: () => void; onGoToField: (fieldId: string) => void;
 }) {
+  useEscapeToClose(onClose);
   const relatedFields = fields.filter(f => f.source?.docId === doc.id);
 
   return (

@@ -7,6 +7,7 @@ import {
 import { fieldStateConfig } from '../data/mockData';
 import { permissionsFor } from '../lib/fieldActions';
 import { FIELD_STATE_ICONS } from '../lib/fieldIcons';
+import { useEscapeToClose } from '../lib/useEscapeToClose';
 import type { ReturnField, TaxDocument, Role } from '../data/mockData';
 
 // ─── Document excerpt (doc-type-accurate mock evidence) ───────────────────────
@@ -406,10 +407,11 @@ export function OverrideModal({ field, onClose, onSave }: {
 }) {
   const [value, setValue] = useState(String(field.value));
   const [reason, setReason] = useState('');
+  useEscapeToClose(onClose);
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md" onClick={e => e.stopPropagation()}>
         <div className="p-5 border-b border-slate-200">
           <h3 className="font-semibold text-slate-800">{field.state === 'rejected' ? 'Provide Corrected Value' : 'Override AI Value'}</h3>
           <p className="text-xs text-slate-500 mt-0.5">Line {field.lineNumber} · {field.label}</p>
@@ -438,6 +440,7 @@ export function OverrideModal({ field, onClose, onSave }: {
             </label>
             <textarea value={reason} onChange={e => setReason(e.target.value)}
               placeholder="Explain why the AI extraction was incorrect…"
+              autoFocus
               rows={3}
               className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm resize-none focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200" />
             <p className="text-xs text-slate-400 mt-1">Required for audit trail.</p>
@@ -466,9 +469,10 @@ export function RejectModal({ field, onClose, onSave }: {
   onSave: (reason: string) => void;
 }) {
   const [reason, setReason] = useState('');
+  useEscapeToClose(onClose);
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md" onClick={e => e.stopPropagation()}>
         <div className="p-5 border-b border-slate-200">
           <h3 className="font-semibold text-slate-800">Reject AI Value</h3>
           <p className="text-xs text-slate-500 mt-0.5">Line {field.lineNumber} · {field.label}</p>
@@ -480,6 +484,7 @@ export function RejectModal({ field, onClose, onSave }: {
             </label>
             <textarea value={reason} onChange={e => setReason(e.target.value)}
               placeholder="Explain why this AI extraction can't be used as-is…"
+              autoFocus
               rows={3}
               className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm resize-none focus:outline-none focus:border-red-400 focus:ring-1 focus:ring-red-200" />
             <p className="text-xs text-slate-400 mt-1">The field will be flagged until a corrected value or clarification resolves it.</p>

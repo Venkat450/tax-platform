@@ -9,6 +9,7 @@ import {
   permissionsFor, messageRoleFor, verifyField, approveField, rejectField, overrideField, buildClarificationThread,
 } from '../lib/fieldActions';
 import { scopedReturnsForRole, fieldStateConfig, urgencyConfig } from '../data/mockData';
+import { FIELD_STATE_ICONS } from '../lib/fieldIcons';
 import type { ReturnField, TaxDocument, TaxReturn } from '../data/mockData';
 import { SourcePanel, OverrideModal, RejectModal } from '../components/FieldReview';
 
@@ -149,22 +150,22 @@ export default function AIReviewQueue() {
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex-shrink-0">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <h1 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-              <Sparkles size={17} className="text-violet-500" /> AI Review Queue
+            <h1 className="text-2xl font-semibold tracking-tight text-slate-900 flex items-center gap-2">
+              <Sparkles size={19} className="text-violet-500" /> AI Review Queue
             </h1>
             <p className="text-sm text-slate-500 mt-0.5">{filtered.length} fields need a decision, prioritized by risk.</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <Filter size={12} className="text-slate-400" />
             <select value={stateFilter} onChange={e => setStateFilter(e.target.value as any)}
-              className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+              className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
               <option value="all">All states</option>
               <option value="rejected">Rejected</option>
               <option value="needs_approval">Needs Approval</option>
               <option value="ai_generated">AI Extracted</option>
             </select>
             <select value={confFilter} onChange={e => setConfFilter(e.target.value as any)}
-              className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+              className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
               <option value="all">Any confidence</option>
               <option value="low">Low (&lt;75%)</option>
               <option value="medium">Medium (75–89%)</option>
@@ -172,7 +173,7 @@ export default function AIReviewQueue() {
             </select>
             {returnOptions.length > 1 && (
               <select value={returnFilter} onChange={e => setReturnFilter(e.target.value)}
-                className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+                className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
                 <option value="all">All returns</option>
                 {returnOptions.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -181,8 +182,8 @@ export default function AIReviewQueue() {
         </div>
 
         {selectedForBulk.size > 0 && (perms.canVerify || perms.canSignOff) && (
-          <div className="mt-3 flex items-center gap-2 bg-teal-50 border border-teal-200 rounded-xl px-3 py-2">
-            <span className="text-xs font-medium text-teal-800">{selectedForBulk.size} selected</span>
+          <div className="mt-3 flex items-center gap-2 bg-indigo-50 border border-indigo-200 rounded-xl px-3 py-2">
+            <span className="text-xs font-medium text-indigo-800">{selectedForBulk.size} selected</span>
             {bulkVerifyCount > 0 && perms.canVerify && (
               <button onClick={runBulkVerify} className="text-xs font-semibold px-2 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
                 Verify {bulkVerifyCount}
@@ -193,7 +194,7 @@ export default function AIReviewQueue() {
                 Approve {bulkApproveCount}
               </button>
             )}
-            <button onClick={() => setSelectedForBulk(new Set())} className="text-xs text-teal-700 hover:underline ml-auto">Clear</button>
+            <button onClick={() => setSelectedForBulk(new Set())} className="text-xs text-indigo-700 hover:underline ml-auto">Clear</button>
           </div>
         )}
       </div>
@@ -208,13 +209,14 @@ export default function AIReviewQueue() {
             </div>
           ) : filtered.map(item => {
             const fsc = fieldStateConfig[item.field.state];
+            const StateIcon = FIELD_STATE_ICONS[item.field.state];
             const conf = item.field.aiMeta ? Math.round(item.field.aiMeta.confidence * 100) : null;
             const isSelected = selected?.key === item.key;
             return (
               <div
                 key={item.key}
                 className={`border rounded-xl p-3 cursor-pointer transition-all ${
-                  isSelected ? 'bg-teal-50 border-teal-300 shadow-sm ring-2 ring-teal-400' : 'bg-white border-slate-100 hover:bg-slate-50'
+                  isSelected ? 'bg-indigo-50 border-indigo-300 shadow-sm ring-2 ring-indigo-400' : 'bg-white border-slate-100 hover:bg-slate-50'
                 }`}
                 onClick={() => setSelectedKey(item.key)}
               >
@@ -231,7 +233,7 @@ export default function AIReviewQueue() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap mb-1">
                       <span className={`inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-md ${fsc.badgeBg} ${fsc.badge}`}>
-                        {fsc.icon} {fsc.label}
+                        <StateIcon size={10} /> {fsc.label}
                       </span>
                       <span className="text-[10px] text-slate-400">{item.ret.clientName}</span>
                     </div>
@@ -264,7 +266,7 @@ export default function AIReviewQueue() {
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 bg-slate-50 flex-shrink-0">
                 <button
                   onClick={() => navigate(`/returns/${selected.ret.id}?tab=fields&field=${selected.field.id}`)}
-                  className="text-xs text-teal-600 hover:text-teal-700 font-medium flex items-center gap-1"
+                  className="text-xs text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
                 >
                   <ExternalLink size={11} /> Open in {selected.ret.clientName}'s return
                 </button>
@@ -316,7 +318,7 @@ export default function AIReviewQueue() {
           {undoFn && (
             <button
               onClick={() => { undoFn(); setToast(null); setUndoFn(null); }}
-              className="flex items-center gap-1 text-teal-300 hover:text-teal-200 font-semibold underline underline-offset-2"
+              className="flex items-center gap-1 text-indigo-300 hover:text-indigo-200 font-semibold underline underline-offset-2"
             >
               <Undo2 size={12} /> Undo
             </button>

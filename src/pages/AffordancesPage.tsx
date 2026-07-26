@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { fieldStateConfig } from '../data/mockData';
+import { FIELD_STATE_ICONS } from '../lib/fieldIcons';
 
 interface DemoField {
   lineNumber: string;
@@ -86,6 +87,7 @@ const DEMO_FIELDS: DemoField[] = [
 
 function DemoFieldCard({ field }: { field: DemoField }) {
   const fsc = fieldStateConfig[field.state];
+  const StateIcon = FIELD_STATE_ICONS[field.state];
   const rowBg =
     field.state === 'needs_approval' ? 'bg-amber-50 border-amber-200' :
     field.state === 'corrected'      ? 'bg-orange-50 border-orange-200' :
@@ -101,7 +103,7 @@ function DemoFieldCard({ field }: { field: DemoField }) {
             <span className="font-medium text-slate-800 text-sm">{field.label}</span>
           </div>
           <span className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${fsc.badgeBg} ${fsc.badge}`}>
-            <span className="text-[10px]">{fsc.icon}</span> {fsc.label}
+            <StateIcon size={10} /> {fsc.label}
           </span>
         </div>
         <div className="text-right flex-shrink-0">
@@ -139,21 +141,21 @@ export default function AffordancesPage() {
   }, []);
 
   const interactionRules = [
-    { icon: MousePointer2, label: 'Clickable',    color: 'text-teal-600', description: 'Interactive elements use cursor-pointer. Rows, buttons, and links respond to hover with bg-slate-50 or teal accent.' },
+    { icon: MousePointer2, label: 'Clickable',    color: 'text-indigo-600', description: 'Interactive elements use cursor-pointer. Rows, buttons, and links respond to hover with bg-slate-50 or teal accent.' },
     { icon: PenLine,       label: 'Editable',     color: 'text-blue-600', description: 'Fields with state manual_entry or ai_generated show a pencil cursor on hover. Click to enter override mode.' },
-    { icon: Sparkles,      label: 'AI-generated', color: 'text-violet-600',description: 'Purple/violet badge with ✦ icon. Always shows confidence %. Click to see source document and reasoning.' },
+    { icon: Sparkles,      label: 'AI-generated', color: 'text-violet-600',description: 'Violet badge with a sparkle icon. Always shows confidence %. Click to see source document and reasoning.' },
     { icon: CheckCircle2,  label: 'Verified',     color: 'text-emerald-600',description: 'Emerald badge. AI extraction confirmed by a CPA. Still traceable but no further action needed.' },
     { icon: AlertTriangle, label: 'Needs approval',color:'text-amber-600', description: 'Amber background. A reviewer must sign off before this value can be included. Blocks return progression.' },
     { icon: Eye,           label: 'Read-only',     color: 'text-slate-500', description: 'Displayed without hover change. No edit affordance. Includes calculated and locked fields.' },
     { icon: Lock,          label: 'Locked',        color: 'text-slate-400', description: 'Lock icon appears when a field cannot be changed regardless of role. Tooltip explains why.' },
-    { icon: RotateCcw,     label: 'Corrected',     color: 'text-orange-600',description: 'Orange ↩ badge. AI was wrong; CPA overrode with a logged reason. History preserved in the source panel.' },
-    { icon: XCircle,       label: 'Rejected',      color: 'text-red-600',   description: 'Red ✗ badge. CPA/reviewer rejected the AI value with a required reason. Blocks progression until corrected or clarified.' },
+    { icon: RotateCcw,     label: 'Corrected',     color: 'text-orange-600',description: 'Orange badge with an undo icon. AI was wrong; CPA overrode with a logged reason. History preserved in the source panel.' },
+    { icon: XCircle,       label: 'Rejected',      color: 'text-red-600',   description: 'Red badge with an X icon. CPA/reviewer rejected the AI value with a required reason. Blocks progression until corrected or clarified.' },
   ];
 
   return (
     <div className="p-6 max-w-5xl">
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-slate-800">Interaction Affordances</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Interaction Affordances</h1>
         <p className="text-slate-500 mt-1 text-sm">
           Ch08 — A consistent visual system for every state a field or element can be in.
           These patterns appear on the dashboard, returns list, and return detail.
@@ -169,7 +171,7 @@ export default function AffordancesPage() {
           </div>
           <button
             onClick={() => navigate('/returns/ret-2024-mitchell')}
-            className="mt-4 w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-teal-600 text-white rounded-xl text-sm font-medium hover:bg-teal-700 transition-colors"
+            className="mt-4 w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors"
           >
             See these in a real return <ArrowRight size={14} />
           </button>

@@ -15,20 +15,21 @@ function StatTile({ icon: Icon, label, value, tone }: {
   tone: 'slate' | 'amber' | 'red' | 'teal';
 }) {
   const toneMap = {
-    slate: 'bg-slate-50 text-slate-700 border-slate-200',
-    amber: 'bg-amber-50 text-amber-700 border-amber-200',
-    red:   'bg-red-50 text-red-700 border-red-200',
-    teal:  'bg-teal-50 text-teal-700 border-teal-200',
+    slate: { chip: 'bg-slate-600', text: 'text-slate-500' },
+    amber: { chip: 'bg-amber-500', text: 'text-amber-600' },
+    red:   { chip: 'bg-red-500',   text: 'text-red-600' },
+    teal:  { chip: 'bg-indigo-600',  text: 'text-indigo-600' },
   };
+  const t = toneMap[tone];
   return (
-    <div className={`rounded-2xl border p-4 ${toneMap[tone]}`}>
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-medium opacity-70">{label}</p>
-          <p className="mt-1.5 text-2xl font-bold tabular-nums">{value}</p>
+    <div className="rounded-2xl border border-slate-200 bg-white p-5">
+      <div className="flex items-center justify-between">
+        <div className={`w-10 h-10 rounded-xl ${t.chip} flex items-center justify-center shadow-sm`}>
+          <Icon size={18} className="text-white" />
         </div>
-        <Icon size={18} className="opacity-50" />
+        <p className="text-3xl font-extrabold tabular-nums text-slate-900">{value}</p>
       </div>
+      <p className={`mt-3 text-xs font-semibold uppercase tracking-wide ${t.text}`}>{label}</p>
     </div>
   );
 }
@@ -59,7 +60,7 @@ function ReturnRow({ ret, role, reason }: { ret: TaxReturn; role: string; reason
             <span className="text-xs text-slate-500 flex items-center gap-1 truncate">
               {reason.owner === 'client'
                 ? <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-blue-100 text-blue-700 flex-shrink-0">Client owns</span>
-                : <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-teal-100 text-teal-700 flex-shrink-0">CPA owns</span>}
+                : <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 flex-shrink-0">CPA owns</span>}
               <span className="truncate">{reason.text}</span>
             </span>
           ) : (
@@ -80,7 +81,7 @@ function ReturnRow({ ret, role, reason }: { ret: TaxReturn; role: string; reason
             <span className={`w-1.5 h-1.5 rounded-full ${uc.dot}`} />{uc.label}
           </span>
         )}
-        <ArrowRight size={13} className="text-slate-300 group-hover:text-teal-500 transition-colors" />
+        <ArrowRight size={13} className="text-slate-300 group-hover:text-indigo-500 transition-colors" />
       </div>
     </button>
   );
@@ -144,7 +145,7 @@ export default function Dashboard() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-slate-800">{titleByRole[role] ?? 'Dashboard'}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{titleByRole[role] ?? 'Dashboard'}</h1>
         <p className="text-sm text-slate-500 mt-0.5">{subtitleByRole[role]}</p>
       </div>
 
@@ -152,7 +153,7 @@ export default function Dashboard() {
       {showcase && role !== 'client' && showcaseNeedsApproval && (
         <button
           onClick={() => navigate(`/returns/${showcase.id}?tab=fields`)}
-          className="w-full flex items-center justify-between gap-4 rounded-2xl p-4 text-left bg-gradient-to-r from-violet-50 to-teal-50 border border-violet-200 hover:border-violet-300 transition-colors"
+          className="w-full flex items-center justify-between gap-4 rounded-2xl p-4 text-left bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-200 hover:border-violet-300 transition-colors"
         >
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-white border border-violet-200 flex items-center justify-center flex-shrink-0">
@@ -173,7 +174,7 @@ export default function Dashboard() {
 
       {/* Client: direct action items */}
       {role === 'client' && myActionItems.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
           <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
             <AlertTriangle size={14} className="text-amber-500" /> We need something from you
           </h2>
@@ -205,7 +206,7 @@ export default function Dashboard() {
 
       {/* Do These First */}
       {role !== 'client' && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
           <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
             <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
               <AlertTriangle size={14} className="text-amber-500" /> Do These First
@@ -216,7 +217,7 @@ export default function Dashboard() {
                 <select
                   value={preparerFilter}
                   onChange={e => setPreparerFilter(e.target.value)}
-                  className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:border-teal-400"
+                  className="text-xs border border-slate-200 rounded-lg px-2 py-1 bg-white focus:outline-none focus:border-indigo-400"
                 >
                   <option value="all">All Preparers</option>
                   {preparers.map(p => <option key={p} value={p}>{p}</option>)}
@@ -246,10 +247,10 @@ export default function Dashboard() {
       )}
 
       {/* Recent returns */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-slate-700">{role === 'client' ? 'My Return' : 'Recent Returns'}</h2>
-          <button onClick={() => navigate('/returns')} className="text-xs text-teal-600 hover:text-teal-700 font-medium">
+          <button onClick={() => navigate('/returns')} className="text-xs text-indigo-600 hover:text-indigo-700 font-medium">
             View all →
           </button>
         </div>

@@ -7,6 +7,7 @@ import {
 import { useApp } from '../context/AppContext';
 import { useReturnsData } from '../context/ReturnsDataContext';
 import { allReturns, stageConfig, urgencyConfig, scopedReturnsForRole, fieldStateConfig } from '../data/mockData';
+import { FIELD_STATE_ICONS } from '../lib/fieldIcons';
 import type { TaxReturn, ReturnStage, FieldState } from '../data/mockData';
 
 type SortKey = 'urgency' | 'deadline' | 'client' | 'stage';
@@ -45,11 +46,14 @@ function FieldStateSummary({ returnId }: { returnId: string }) {
 
   return (
     <div className="flex items-center gap-1 mt-1 flex-wrap">
-      {counts.map(c => (
-        <span key={c.state} className={`inline-flex items-center gap-0.5 text-[9px] font-semibold px-1.5 py-0.5 rounded-md ${c.badgeBg} ${c.badge}`}>
-          <span>{c.icon}</span>{c.count} {c.label}
-        </span>
-      ))}
+      {counts.map(c => {
+        const Icon = FIELD_STATE_ICONS[c.state];
+        return (
+          <span key={c.state} className={`inline-flex items-center gap-0.5 text-[9px] font-semibold px-1.5 py-0.5 rounded-md ${c.badgeBg} ${c.badge}`}>
+            <Icon size={9} />{c.count} {c.label}
+          </span>
+        );
+      })}
     </div>
   );
 }
@@ -123,9 +127,9 @@ export default function ReturnsList() {
 
   const SortBtn = ({ k, label }: { k: SortKey; label: string }) => (
     <button onClick={() => toggleSort(k)}
-      className="flex items-center gap-1 text-xs font-semibold text-slate-500 uppercase tracking-wider hover:text-teal-600 transition-colors">
+      className="flex items-center gap-1 text-xs font-semibold text-slate-500 uppercase tracking-wider hover:text-indigo-600 transition-colors">
       {label}
-      <ArrowUpDown size={10} className={sortKey === k ? 'text-teal-500' : 'text-slate-300'} />
+      <ArrowUpDown size={10} className={sortKey === k ? 'text-indigo-500' : 'text-slate-300'} />
     </button>
   );
 
@@ -139,7 +143,7 @@ export default function ReturnsList() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-xl font-bold text-slate-800">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
             {role === 'client' ? 'My Documents' : role === 'seasonal_staff' ? 'My Returns' : 'Returns'}
           </h1>
           <p className="text-sm text-slate-500 mt-0.5">{filtered.length} returns</p>
@@ -169,24 +173,24 @@ export default function ReturnsList() {
           <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input type="text" placeholder="Search clients or types…" value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-200" />
+            className="w-full pl-8 pr-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200" />
         </div>
         {role !== 'client' && (
           <div className="flex items-center gap-2 flex-wrap">
             <Filter size={12} className="text-slate-400" />
             <select value={filterStage} onChange={e => setFilterStage(e.target.value)}
-              className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+              className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
               <option value="all">All Stages</option>
               {Object.entries(stageConfig).map(([k, v]) => <option key={k} value={k}>{v.cpaLabel}</option>)}
             </select>
             <select value={filterType} onChange={e => setFilterType(e.target.value)}
-              className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+              className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
               <option value="all">All Types</option>
               {['1040','1065','1120S','1041'].map(t => <option key={t}>{t}</option>)}
             </select>
             {role !== 'seasonal_staff' && (
               <select value={filterPreparer} onChange={e => setFilterPreparer(e.target.value)}
-                className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+                className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
                 <option value="all">All Preparers</option>
                 {preparers.map(p => <option key={p}>{p}</option>)}
               </select>
@@ -197,11 +201,11 @@ export default function ReturnsList() {
 
       {/* Bulk reassign toolbar */}
       {canBulkReassign && selectedIds.size > 0 && (
-        <div className="flex items-center gap-2 mb-3 bg-teal-50 border border-teal-200 rounded-xl px-3 py-2">
-          <Users size={13} className="text-teal-600" />
-          <span className="text-xs font-medium text-teal-800">{selectedIds.size} selected</span>
+        <div className="flex items-center gap-2 mb-3 bg-indigo-50 border border-indigo-200 rounded-xl px-3 py-2">
+          <Users size={13} className="text-indigo-600" />
+          <span className="text-xs font-medium text-indigo-800">{selectedIds.size} selected</span>
           <select value={reassignTo} onChange={e => setReassignTo(e.target.value)}
-            className="text-xs border border-teal-200 rounded-lg px-2 py-1 bg-white focus:outline-none">
+            className="text-xs border border-indigo-200 rounded-lg px-2 py-1 bg-white focus:outline-none">
             <option value="">Reassign to…</option>
             {preparers.map(p => <option key={p} value={p}>{p}</option>)}
           </select>
@@ -212,11 +216,11 @@ export default function ReturnsList() {
               setSelectedIds(new Set());
               setReassignTo('');
             }}
-            className="text-xs font-semibold px-2 py-1 rounded-lg bg-teal-600 text-white hover:bg-teal-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="text-xs font-semibold px-2 py-1 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             Reassign {selectedIds.size}
           </button>
-          <button onClick={() => setSelectedIds(new Set())} className="text-xs text-teal-700 hover:underline ml-auto">Clear</button>
+          <button onClick={() => setSelectedIds(new Set())} className="text-xs text-indigo-700 hover:underline ml-auto">Clear</button>
         </div>
       )}
 
@@ -225,19 +229,19 @@ export default function ReturnsList() {
         <div className="flex items-center gap-2 mb-3 flex-wrap">
           <span className="text-xs text-slate-500">Filtered:</span>
           {search && (
-            <span className="text-xs bg-teal-50 text-teal-700 border border-teal-200 px-2 py-0.5 rounded-full flex items-center gap-1">
-              "{search}" <button onClick={() => setSearch('')} className="hover:text-teal-900 font-bold">×</button>
+            <span className="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+              "{search}" <button onClick={() => setSearch('')} className="hover:text-indigo-900 font-bold">×</button>
             </span>
           )}
           {filterStage !== 'all' && (
-            <span className="text-xs bg-teal-50 text-teal-700 border border-teal-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+            <span className="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2 py-0.5 rounded-full flex items-center gap-1">
               {stageConfig[filterStage as ReturnStage].cpaLabel}
-              <button onClick={() => setFilterStage('all')} className="hover:text-teal-900 font-bold">×</button>
+              <button onClick={() => setFilterStage('all')} className="hover:text-indigo-900 font-bold">×</button>
             </span>
           )}
           {filterType !== 'all' && (
-            <span className="text-xs bg-teal-50 text-teal-700 border border-teal-200 px-2 py-0.5 rounded-full flex items-center gap-1">
-              {filterType} <button onClick={() => setFilterType('all')} className="hover:text-teal-900 font-bold">×</button>
+            <span className="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2 py-0.5 rounded-full flex items-center gap-1">
+              {filterType} <button onClick={() => setFilterType('all')} className="hover:text-indigo-900 font-bold">×</button>
             </span>
           )}
         </div>
@@ -328,7 +332,7 @@ export default function ReturnsList() {
                     </span>
                   </td>
                   <td className="px-4 py-3">
-                    <ChevronRight size={13} className="text-slate-200 group-hover:text-teal-500 transition-colors" />
+                    <ChevronRight size={13} className="text-slate-200 group-hover:text-indigo-500 transition-colors" />
                   </td>
                 </tr>
               );
@@ -340,7 +344,7 @@ export default function ReturnsList() {
           <div className="py-12 text-center">
             <p className="text-slate-400 text-sm">No returns match your filters.</p>
             <button onClick={() => { setSearch(''); setFilterStage('all'); setFilterType('all'); setFilterPreparer('all'); }}
-              className="text-teal-600 text-xs mt-1 hover:underline">Clear filters</button>
+              className="text-indigo-600 text-xs mt-1 hover:underline">Clear filters</button>
           </div>
         )}
 
@@ -368,7 +372,7 @@ export default function ReturnsList() {
                   key={pageNum}
                   onClick={() => setPage(pageNum)}
                   className={`w-7 h-7 flex items-center justify-center rounded-lg text-xs font-medium transition-colors ${
-                    page === pageNum ? 'bg-teal-600 text-white' : 'text-slate-500 hover:bg-slate-200'
+                    page === pageNum ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:bg-slate-200'
                   }`}
                 >
                   {pageNum}

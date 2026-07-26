@@ -120,7 +120,7 @@ export default function TasksPage() {
     <div className="p-6 max-w-4xl">
       <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-800">Tasks</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Tasks</h1>
           <p className="text-sm text-slate-500 mt-0.5">
             {role === 'client' ? 'Things we need from you, and what we\'re working on.' : 'Every open item across your returns, in one place.'}
           </p>
@@ -128,14 +128,14 @@ export default function TasksPage() {
         <div className="flex items-center gap-2 flex-wrap">
           <Filter size={12} className="text-slate-400" />
           <select value={typeFilter} onChange={e => setTypeFilter(e.target.value as any)}
-            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
             <option value="all">All types ({counts.all})</option>
             <option value="blocker">Blockers ({counts.blocker})</option>
             <option value="clarification">Clarifications ({counts.clarification})</option>
             <option value="ai_review">AI Review ({counts.ai_review})</option>
           </select>
           <select value={ownerFilter} onChange={e => setOwnerFilter(e.target.value as any)}
-            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
             <option value="all">Everyone</option>
             <option value="mine">Assigned to me</option>
           </select>
@@ -167,7 +167,7 @@ export default function TasksPage() {
                     <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${meta.color}`}>{meta.label}</span>
                     {t.owner !== 'unassigned' && (
                       <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                        t.owner === 'client' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'
+                        t.owner === 'client' ? 'bg-blue-100 text-blue-700' : 'bg-indigo-100 text-indigo-700'
                       }`}>
                         {t.owner === 'client' ? 'Client owns' : 'CPA owns'}
                       </span>
@@ -180,7 +180,7 @@ export default function TasksPage() {
                   <span className={`inline-flex items-center gap-1 text-xs font-semibold ${uc.color}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${uc.dot}`} />{uc.label}
                   </span>
-                  <ArrowRight size={13} className="text-slate-300 group-hover:text-teal-500 transition-colors" />
+                  <ArrowRight size={13} className="text-slate-300 group-hover:text-indigo-500 transition-colors" />
                 </div>
               </button>
             );

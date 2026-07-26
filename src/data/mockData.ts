@@ -780,16 +780,16 @@ export const urgencyConfig = {
 };
 
 export const fieldStateConfig: Record<FieldState, {
-  label: string; badge: string; badgeBg: string; icon: string; description: string;
+  label: string; badge: string; badgeBg: string; description: string;
 }> = {
-  ai_generated:  { label: 'AI Extracted',   badge: 'text-violet-700', badgeBg: 'bg-violet-50 border border-violet-200',  icon: '✦', description: 'Extracted by AI — verify before accepting' },
-  ai_verified:   { label: 'AI · Verified',  badge: 'text-emerald-700',badgeBg: 'bg-emerald-50 border border-emerald-200',icon: '✦', description: 'AI extraction verified by CPA' },
-  manual_entry:  { label: 'Manual Entry',   badge: 'text-blue-700',   badgeBg: 'bg-blue-50 border border-blue-200',      icon: '✎', description: 'Entered manually by CPA' },
-  client_provided:{ label:'Client Provided', badge: 'text-teal-700',   badgeBg: 'bg-teal-50 border border-teal-200',      icon: '◎', description: 'Answered by client in questionnaire' },
-  locked:        { label: 'Locked',          badge: 'text-slate-500',  badgeBg: 'bg-slate-50 border border-slate-200',    icon: '🔒', description: 'Read-only — cannot be changed' },
-  needs_approval:{ label: 'Needs Approval',  badge: 'text-amber-700',  badgeBg: 'bg-amber-50 border border-amber-200',    icon: '⚠', description: 'Requires senior reviewer sign-off' },
-  corrected:     { label: 'AI Corrected',    badge: 'text-orange-700', badgeBg: 'bg-orange-50 border border-orange-200',  icon: '↩', description: 'AI extraction was overridden' },
-  rejected:      { label: 'Rejected',        badge: 'text-red-700',    badgeBg: 'bg-red-50 border border-red-200',        icon: '✗', description: 'AI extraction rejected — needs a corrected value or client clarification' },
+  ai_generated:  { label: 'AI Extracted',   badge: 'text-violet-700', badgeBg: 'bg-violet-50 border border-violet-200',  description: 'Extracted by AI — verify before accepting' },
+  ai_verified:   { label: 'AI · Verified',  badge: 'text-emerald-700',badgeBg: 'bg-emerald-50 border border-emerald-200',description: 'AI extraction verified by CPA' },
+  manual_entry:  { label: 'Manual Entry',   badge: 'text-blue-700',   badgeBg: 'bg-blue-50 border border-blue-200',      description: 'Entered manually by CPA' },
+  client_provided:{ label:'Client Provided', badge: 'text-indigo-700',   badgeBg: 'bg-indigo-50 border border-indigo-200',      description: 'Answered by client in questionnaire' },
+  locked:        { label: 'Locked',          badge: 'text-slate-500',  badgeBg: 'bg-slate-50 border border-slate-200',    description: 'Read-only — cannot be changed' },
+  needs_approval:{ label: 'Needs Approval',  badge: 'text-amber-700',  badgeBg: 'bg-amber-50 border border-amber-200',    description: 'Requires senior reviewer sign-off' },
+  corrected:     { label: 'AI Corrected',    badge: 'text-orange-700', badgeBg: 'bg-orange-50 border border-orange-200',  description: 'AI extraction was overridden' },
+  rejected:      { label: 'Rejected',        badge: 'text-red-700',    badgeBg: 'bg-red-50 border border-red-200',        description: 'AI extraction rejected — needs a corrected value or client clarification' },
 };
 
 // ─── Mock clients ────────────────────────────────────────────────────────────

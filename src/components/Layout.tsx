@@ -65,7 +65,7 @@ const NAV: Record<Role, Array<{ icon: React.ElementType; label: string; path: st
 const ROLE_COLORS: Record<Role, {
   bg: string; badgeBg: string; badgeText: string; label: string; dot: string; ring: string;
 }> = {
-  cpa:            { bg: 'bg-teal-500',   badgeBg: 'bg-teal-500/15',   badgeText: 'text-teal-300',   dot: 'bg-teal-400',   ring: 'ring-teal-400',   label: 'CPA'            },
+  cpa:            { bg: 'bg-indigo-500',   badgeBg: 'bg-indigo-500/15',   badgeText: 'text-indigo-300',   dot: 'bg-indigo-400',   ring: 'ring-indigo-400',   label: 'CPA'            },
   client:         { bg: 'bg-blue-500',   badgeBg: 'bg-blue-500/15',   badgeText: 'text-blue-300',   dot: 'bg-blue-400',   ring: 'ring-blue-400',   label: 'Client'         },
   reviewer:       { bg: 'bg-violet-500', badgeBg: 'bg-violet-500/15', badgeText: 'text-violet-300', dot: 'bg-violet-400', ring: 'ring-violet-400', label: 'Reviewer'       },
   admin:          { bg: 'bg-orange-500', badgeBg: 'bg-orange-500/15', badgeText: 'text-orange-300', dot: 'bg-orange-400', ring: 'ring-orange-400', label: 'Admin'          },
@@ -209,7 +209,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: '#f5f6f8' }}>
+    <div className="flex h-screen overflow-hidden bg-slate-50">
 
       {/* ── Sidebar ────────────────────────────────────────────────── */}
       <aside className="w-64 flex-shrink-0 flex flex-col select-none"
@@ -222,13 +222,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="px-5 pt-6 pb-5">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #2dd4bf 0%, #0f766e 100%)', boxShadow: '0 4px 12px rgba(13,148,136,0.5)' }}>
+              style={{ background: 'linear-gradient(135deg, #818cf8 0%, #4338ca 100%)', boxShadow: '0 4px 12px rgba(79,70,229,0.5)' }}>
               <Sparkles size={14} className="text-white" />
             </div>
             <div className="flex items-center gap-2">
               <span className="text-white font-bold text-[15px] tracking-tight">TaxFlow</span>
               <span className="text-[9px] font-bold px-1.5 py-0.5 rounded tracking-widest"
-                style={{ background: 'rgba(45,212,191,0.12)', color: '#5eead4', border: '1px solid rgba(45,212,191,0.2)' }}>
+                style={{ background: 'rgba(129,140,248,0.12)', color: '#a5b4fc', border: '1px solid rgba(129,140,248,0.2)' }}>
                 AI
               </span>
             </div>
@@ -265,9 +265,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               >
                 {active && (
                   <span className="absolute left-0 inset-y-2.5 w-[3px] rounded-full"
-                    style={{ background: '#2dd4bf' }} />
+                    style={{ background: '#818cf8' }} />
                 )}
-                <Icon size={15} style={{ color: active ? '#5eead4' : undefined }} />
+                <Icon size={15} style={{ color: active ? '#a5b4fc' : undefined }} />
                 {label}
               </Link>
             );
@@ -288,9 +288,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   ? { background: 'rgba(255,255,255,0.08)' } : {}}
               >
                 {location.pathname.includes(currentUser.personalReturnId!) && (
-                  <span className="absolute left-0 inset-y-2.5 w-[3px] rounded-full" style={{ background: '#2dd4bf' }} />
+                  <span className="absolute left-0 inset-y-2.5 w-[3px] rounded-full" style={{ background: '#818cf8' }} />
                 )}
-                <User size={15} style={{ color: location.pathname.includes(currentUser.personalReturnId!) ? '#5eead4' : undefined }} />
+                <User size={15} style={{ color: location.pathname.includes(currentUser.personalReturnId!) ? '#a5b4fc' : undefined }} />
                 My Personal Return
               </Link>
             </>
@@ -334,7 +334,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     key={opt.role}
                     onClick={() => handleRoleSwitch(opt.role)}
                     className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
-                      isActive ? 'bg-teal-50' : 'hover:bg-slate-50'
+                      isActive ? 'bg-indigo-50' : 'hover:bg-slate-50'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-full ${orc.bg} flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0`}>
@@ -353,7 +353,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       <p className="text-xs text-slate-400 truncate">{opt.subtitle}</p>
                     </div>
                     {isActive && (
-                      <div className="w-2 h-2 rounded-full bg-teal-500 flex-shrink-0" />
+                      <div className="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0" />
                     )}
                   </button>
                 );
@@ -372,8 +372,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="flex-1 flex flex-col overflow-hidden">
 
         {/* Top header bar */}
-        <header className="h-14 flex-shrink-0 flex items-center justify-between px-6 bg-white"
-          style={{ borderBottom: '1px solid #e8eaed', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+        <header className="h-16 flex-shrink-0 flex items-center justify-between px-7 bg-white/90 backdrop-blur-sm"
+          style={{ borderBottom: '1px solid #e8eaed', boxShadow: '0 1px 2px rgba(15,23,42,0.04)' }}>
           {/* Left: breadcrumbs */}
           <div className="flex items-center gap-1.5 min-w-0">
             {breadcrumbs.map((bc, i) => (

@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { fieldStateConfig } from '../data/mockData';
 import { permissionsFor } from '../lib/fieldActions';
+import { FIELD_STATE_ICONS } from '../lib/fieldIcons';
 import type { ReturnField, TaxDocument, Role } from '../data/mockData';
 
 // ─── Document excerpt (doc-type-accurate mock evidence) ───────────────────────
@@ -101,6 +102,7 @@ export function SourcePanel({
 }) {
   const [expanded, setExpanded] = useState(false);
   const fsc = fieldStateConfig[field.state];
+  const StateIcon = FIELD_STATE_ICONS[field.state];
   const src = field.source;
   const ai  = field.aiMeta;
   const conf = ai ? Math.round(ai.confidence * 100) : null;
@@ -119,7 +121,7 @@ export function SourcePanel({
         <div className="flex-1 flex items-center justify-center p-6 text-center">
           <div>
             <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${fsc.badgeBg} ${fsc.badge} mb-3`}>
-              {fsc.icon} {fsc.label}
+              <StateIcon size={12} /> {fsc.label}
             </span>
             <p className="text-sm text-slate-500">
               {field.state === 'locked'          ? field.lockReason :
@@ -156,7 +158,7 @@ export function SourcePanel({
         {/* State badge */}
         <div className="p-4 border-b border-slate-100">
           <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full ${fsc.badgeBg} ${fsc.badge}`}>
-            {fsc.icon} {fsc.label}
+            <StateIcon size={12} /> {fsc.label}
           </span>
           <p className="text-xs text-slate-500 mt-1.5">{fsc.description}</p>
         </div>
@@ -184,7 +186,7 @@ export function SourcePanel({
               </div>
               <button
                 onClick={() => onGoToDoc(src.docId)}
-                className="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-700 flex-shrink-0 font-medium"
+                className="flex items-center gap-1 text-xs text-indigo-600 hover:text-indigo-700 flex-shrink-0 font-medium"
                 title="Go to document"
               >
                 <ExternalLink size={12} /> View
@@ -203,7 +205,7 @@ export function SourcePanel({
             <ArrowRight size={13} className="text-slate-300 mx-2" />
             <div className="text-right">
               <p className="text-xs text-slate-400">Used in return</p>
-              <p className="text-sm font-mono font-semibold text-teal-700">
+              <p className="text-sm font-mono font-semibold text-indigo-700">
                 {typeof field.value === 'number' ? `$${field.value.toLocaleString()}` : field.value}
               </p>
             </div>
@@ -230,7 +232,7 @@ export function SourcePanel({
             </div>
             <button
               onClick={() => setExpanded(!expanded)}
-              className="text-xs text-teal-600 hover:text-teal-700 flex items-center gap-1"
+              className="text-xs text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
             >
               Why this confidence?
               <ChevronDown size={11} className={`transition-transform ${expanded ? 'rotate-180' : ''}`} />
@@ -338,9 +340,10 @@ export function FieldRow({ field, isSelected, onClick, subtitle }: {
   field: ReturnField; isSelected: boolean; onClick: () => void; subtitle?: string;
 }) {
   const fsc = fieldStateConfig[field.state];
+  const StateIcon = FIELD_STATE_ICONS[field.state];
   const conf = field.aiMeta ? Math.round(field.aiMeta.confidence * 100) : null;
   const rowBg =
-    isSelected              ? 'bg-teal-50 border-teal-300 shadow-sm' :
+    isSelected              ? 'bg-indigo-50 border-indigo-300 shadow-sm' :
     field.state === 'needs_approval' ? 'bg-amber-50 border-amber-200 hover:bg-amber-100' :
     field.state === 'rejected'       ? 'bg-red-50 border-red-200 hover:bg-red-100' :
     field.state === 'corrected'      ? 'bg-orange-50 border-orange-200 hover:bg-orange-100' :
@@ -350,7 +353,7 @@ export function FieldRow({ field, isSelected, onClick, subtitle }: {
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left border rounded-xl p-3 transition-all ${rowBg} ${isSelected ? 'ring-2 ring-teal-400' : ''}`}
+      className={`w-full text-left border rounded-xl p-3 transition-all ${rowBg} ${isSelected ? 'ring-2 ring-indigo-400' : ''}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
@@ -361,7 +364,7 @@ export function FieldRow({ field, isSelected, onClick, subtitle }: {
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <span className={`inline-flex items-center gap-1 text-xs font-medium px-1.5 py-0.5 rounded-md ${fsc.badgeBg} ${fsc.badge}`}>
-              <span className="text-[10px]">{fsc.icon}</span> {fsc.label}
+              <StateIcon size={10} /> {fsc.label}
             </span>
             {field.source && (
               <span className="text-xs text-slate-400 flex items-center gap-1">
@@ -427,7 +430,7 @@ export function OverrideModal({ field, onClose, onSave }: {
           <div>
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Corrected Value</label>
             <input type="text" value={value} onChange={e => setValue(e.target.value)}
-              className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-200" />
+              className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm font-mono focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200" />
           </div>
           <div>
             <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">
@@ -436,7 +439,7 @@ export function OverrideModal({ field, onClose, onSave }: {
             <textarea value={reason} onChange={e => setReason(e.target.value)}
               placeholder="Explain why the AI extraction was incorrect…"
               rows={3}
-              className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm resize-none focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-200" />
+              className="w-full border border-slate-200 rounded-xl px-3 py-2 text-sm resize-none focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200" />
             <p className="text-xs text-slate-400 mt-1">Required for audit trail.</p>
           </div>
         </div>

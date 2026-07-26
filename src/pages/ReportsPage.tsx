@@ -88,7 +88,7 @@ export default function ReportsPage() {
   return (
     <div className="p-6 max-w-3xl space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-slate-800">Reports</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Reports</h1>
         <p className="text-sm text-slate-500 mt-0.5">
           {role === 'client' ? 'A summary of your return.' : `Metrics across ${stageTotal} return${stageTotal === 1 ? '' : 's'} you can see.`}
         </p>
@@ -112,14 +112,14 @@ export default function ReportsPage() {
       {totalReviewed === 0 && (
         <p className="text-xs text-slate-400 -mt-3">
           These rates are computed from fields that have gone through review. Only returns with full field-level data (like{' '}
-          <button onClick={() => navigate('/returns/ret-2024-mitchell?tab=fields')} className="text-teal-600 hover:underline">
+          <button onClick={() => navigate('/returns/ret-2024-mitchell?tab=fields')} className="text-indigo-600 hover:underline">
             Sarah Mitchell's return
           </button>) contribute here — most demo returns don't have field data populated.
         </p>
       )}
 
       {/* Stage distribution */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
         <h2 className="text-sm font-semibold text-slate-700 mb-3">Returns by Stage</h2>
         <div className="space-y-3">
           {stageCounts.map(({ stage, count }) => {
@@ -135,7 +135,7 @@ export default function ReportsPage() {
 
       {/* Urgency distribution */}
       {role !== 'client' && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
           <h2 className="text-sm font-semibold text-slate-700 mb-3">Returns by Priority</h2>
           <div className="space-y-3">
             {urgencyCounts.map(({ urgency, count }) => {
@@ -151,7 +151,7 @@ export default function ReportsPage() {
 
       {/* Confidence distribution */}
       {confTotal > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
           <h2 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-1.5">
             <TrendingUp size={13} className="text-violet-500" /> AI Confidence Distribution
           </h2>

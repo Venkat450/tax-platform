@@ -36,14 +36,14 @@ export default function SettingsPage() {
   return (
     <div className="p-6 max-w-3xl space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-slate-800">Settings</h1>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Settings</h1>
         <p className="text-sm text-slate-500 mt-0.5">Signed in as {currentUser.name} · {ROLE_LABELS[role]}</p>
       </div>
 
       {/* My permissions */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
         <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
-          <ShieldCheck size={14} className="text-teal-600" /> What you can do as {ROLE_LABELS[role]}
+          <ShieldCheck size={14} className="text-indigo-600" /> What you can do as {ROLE_LABELS[role]}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {ACTIONS.map(a => (
@@ -63,14 +63,14 @@ export default function SettingsPage() {
       </div>
 
       {/* Full matrix */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 overflow-x-auto">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 overflow-x-auto">
         <h2 className="text-sm font-semibold text-slate-700 mb-3">Roles & Permissions</h2>
         <table className="w-full text-xs min-w-[560px]">
           <thead>
             <tr>
               <th className="text-left pb-2 font-semibold text-slate-500">Action</th>
               {ROLE_OPTIONS.map(o => (
-                <th key={o.role} className={`text-center pb-2 font-semibold ${o.role === role ? 'text-teal-700' : 'text-slate-500'}`}>
+                <th key={o.role} className={`text-center pb-2 font-semibold ${o.role === role ? 'text-indigo-700' : 'text-slate-500'}`}>
                   {ROLE_LABELS[o.role]}
                 </th>
               ))}
@@ -83,7 +83,7 @@ export default function SettingsPage() {
                 {ROLE_OPTIONS.map(o => {
                   const allowed = permissionsFor(o.role)[a.key];
                   return (
-                    <td key={o.role} className={`py-2 text-center ${o.role === role ? 'bg-teal-50' : ''}`}>
+                    <td key={o.role} className={`py-2 text-center ${o.role === role ? 'bg-indigo-50' : ''}`}>
                       {allowed
                         ? <Check size={13} className="text-emerald-600 mx-auto" />
                         : <X size={13} className="text-slate-300 mx-auto" />}
@@ -100,7 +100,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Preferences */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
         <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
           <Bell size={14} className="text-slate-500" /> Notification Preferences
         </h2>
@@ -115,10 +115,18 @@ export default function SettingsPage() {
               <span className="text-sm text-slate-700">{pref.label}</span>
               <button
                 type="button"
+                role="switch"
+                aria-checked={pref.checked}
                 onClick={() => pref.set(!pref.checked)}
-                className={`w-9 h-5 rounded-full flex-shrink-0 transition-colors relative ${pref.checked ? 'bg-teal-600' : 'bg-slate-200'}`}
+                className={`w-11 h-6 rounded-full flex-shrink-0 transition-colors duration-200 relative border ${
+                  pref.checked ? 'bg-indigo-600 border-indigo-600' : 'bg-slate-300 border-slate-300'
+                }`}
               >
-                <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${pref.checked ? 'translate-x-4' : 'translate-x-0.5'}`} />
+                <span
+                  className={`absolute left-0.5 top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${
+                    pref.checked ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
               </button>
             </label>
           ))}

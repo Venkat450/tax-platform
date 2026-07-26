@@ -51,19 +51,19 @@ export default function MessagesPage() {
     <div className="p-6 max-w-3xl">
       <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-800">Messages</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-900">Messages</h1>
           <p className="text-sm text-slate-500 mt-0.5">Conversations across {role === 'client' ? 'your return' : 'all your returns'}.</p>
         </div>
         <div className="flex items-center gap-2">
           <Filter size={12} className="text-slate-400" />
           <select value={statusFilter} onChange={e => setStatusFilter(e.target.value as any)}
-            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
             <option value="open">Open</option>
             <option value="resolved">Resolved</option>
             <option value="all">All</option>
           </select>
           <select value={ownerFilter} onChange={e => setOwnerFilter(e.target.value as any)}
-            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-teal-400">
+            className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 bg-white focus:outline-none focus:border-indigo-400">
             <option value="all">Everyone</option>
             <option value="mine">Assigned to me</option>
           </select>
@@ -97,7 +97,7 @@ export default function MessagesPage() {
                       </span>
                     ) : thread.ownerAction !== 'none' && (
                       <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                        thread.ownerAction === 'client' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'
+                        thread.ownerAction === 'client' ? 'bg-blue-100 text-blue-700' : 'bg-indigo-100 text-indigo-700'
                       }`}>
                         {thread.ownerAction === 'client' ? 'Client owns' : 'CPA owns'}
                       </span>
@@ -113,7 +113,7 @@ export default function MessagesPage() {
                     </p>
                   )}
                 </div>
-                <ArrowRight size={13} className="text-slate-300 group-hover:text-teal-500 transition-colors flex-shrink-0 mt-1" />
+                <ArrowRight size={13} className="text-slate-300 group-hover:text-indigo-500 transition-colors flex-shrink-0 mt-1" />
               </button>
             );
           })}

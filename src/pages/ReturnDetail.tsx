@@ -7,6 +7,7 @@ import {
 import { useApp } from '../context/AppContext';
 import { useReturnsData } from '../context/ReturnsDataContext';
 import { messageRoleFor, verifyField, approveField, rejectField, overrideField, buildClarificationThread } from '../lib/fieldActions';
+import { FIELD_STATE_ICONS } from '../lib/fieldIcons';
 import {
   allReturns, sampleReturn, alexPersonalReturn, stageConfig, STAGES, fieldStateConfig, urgencyConfig,
 } from '../data/mockData';
@@ -34,13 +35,13 @@ function StatusPipeline({ stage, role }: { stage: string; role: string }) {
             <div className="flex items-center gap-1.5">
               <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                 done   ? 'bg-emerald-500 text-white' :
-                active ? 'bg-teal-600 text-white ring-4 ring-teal-100' :
+                active ? 'bg-indigo-600 text-white ring-4 ring-indigo-100' :
                          'bg-slate-200 text-slate-400'
               }`}>
                 {done ? <CheckCircle2 size={12} /> : <span className="text-xs font-bold">{i + 1}</span>}
               </div>
               <span className={`text-xs font-medium whitespace-nowrap ${
-                active ? 'text-teal-700' : done ? 'text-slate-500' : 'text-slate-400'
+                active ? 'text-indigo-700' : done ? 'text-slate-500' : 'text-slate-400'
               }`}>{label}</span>
             </div>
             {i < stages.length - 1 && (
@@ -117,7 +118,7 @@ function CollabPanel({
               onClick={() => onSelectThread(t.id)}
               className={`flex-shrink-0 text-left px-3 py-2 rounded-xl border text-xs transition-all ${
                 selected?.id === t.id
-                  ? 'bg-teal-50 border-teal-300 text-teal-800'
+                  ? 'bg-indigo-50 border-indigo-300 text-indigo-800'
                   : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
               }`}
             >
@@ -127,7 +128,7 @@ function CollabPanel({
                   <span className="text-[9px] font-medium px-1 rounded bg-emerald-100 text-emerald-700">Resolved</span>
                 ) : t.ownerAction !== 'none' && (
                   <span className={`text-[9px] font-medium px-1 rounded ${
-                    t.ownerAction === 'client' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'
+                    t.ownerAction === 'client' ? 'bg-blue-100 text-blue-700' : 'bg-indigo-100 text-indigo-700'
                   }`}>
                     {t.ownerAction === 'client' ? 'Client owns' : 'CPA owns'}
                   </span>
@@ -152,7 +153,7 @@ function CollabPanel({
               {selected.linkedFieldId && (
                 <button
                   onClick={() => onGoToField(selected.linkedFieldId!)}
-                  className="text-xs text-teal-600 hover:text-teal-700 underline flex items-center gap-0.5"
+                  className="text-xs text-indigo-600 hover:text-indigo-700 underline flex items-center gap-0.5"
                 >
                   <ArrowLeft size={10} /> View linked field
                 </button>
@@ -160,7 +161,7 @@ function CollabPanel({
               {selected.linkedDocId && (
                 <button
                   onClick={() => onGoToDoc(selected.linkedDocId!)}
-                  className="text-xs text-teal-600 hover:text-teal-700 underline flex items-center gap-0.5"
+                  className="text-xs text-indigo-600 hover:text-indigo-700 underline flex items-center gap-0.5"
                 >
                   <FileText size={10} /> View linked document
                 </button>
@@ -210,7 +211,7 @@ function CollabPanel({
                 </div>
                 <div className={`rounded-2xl px-3 py-2 text-xs leading-relaxed ${
                   msg.isInternal ? 'bg-slate-800 text-slate-200 rounded-tl-none' :
-                  isMe           ? 'bg-teal-600 text-white rounded-br-none' :
+                  isMe           ? 'bg-indigo-600 text-white rounded-br-none' :
                                    'bg-white border border-slate-200 text-slate-700 rounded-bl-none'
                 }`}>
                   {msg.content}
@@ -229,7 +230,7 @@ function CollabPanel({
         {role !== 'client' && (
           <div className="flex items-center gap-2 mb-2">
             <button onClick={() => setIsInternal(false)}
-              className={`text-xs px-2 py-1 rounded-lg transition-colors ${!isInternal ? 'bg-teal-600 text-white' : 'text-slate-500 hover:bg-slate-100'}`}>
+              className={`text-xs px-2 py-1 rounded-lg transition-colors ${!isInternal ? 'bg-indigo-600 text-white' : 'text-slate-500 hover:bg-slate-100'}`}>
               Client-visible
             </button>
             <button onClick={() => setIsInternal(true)}
@@ -245,10 +246,10 @@ function CollabPanel({
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}
             placeholder={isInternal ? 'Internal note (not visible to client)…' : 'Message client…'}
             rows={2}
-            className="flex-1 text-xs border border-slate-200 rounded-xl px-3 py-2 resize-none focus:outline-none focus:border-teal-400 focus:ring-1 focus:ring-teal-200"
+            className="flex-1 text-xs border border-slate-200 rounded-xl px-3 py-2 resize-none focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-200"
           />
           <button onClick={send} disabled={!newMessage.trim()}
-            className="px-3 py-2 bg-teal-600 text-white rounded-xl hover:bg-teal-700 disabled:opacity-40 transition-colors self-end">
+            className="px-3 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-40 transition-colors self-end">
             <Send size={13} />
           </button>
         </div>
@@ -261,7 +262,7 @@ function CollabPanel({
 
 function DocumentList({ documents, highlightId, blockers }: { documents: TaxDocument[]; highlightId?: string; blockers: string[] }) {
   const typeColors: Record<string, string> = {
-    'W-2': 'bg-blue-100 text-blue-700', '1099-INT': 'bg-teal-100 text-teal-700',
+    'W-2': 'bg-blue-100 text-blue-700', '1099-INT': 'bg-indigo-100 text-indigo-700',
     '1099-DIV': 'bg-violet-100 text-violet-700', '1098': 'bg-orange-100 text-orange-700',
     'Schedule-K1': 'bg-pink-100 text-pink-700', '1099-B': 'bg-amber-100 text-amber-700',
     'Other': 'bg-slate-100 text-slate-600',
@@ -300,7 +301,7 @@ function DocumentList({ documents, highlightId, blockers }: { documents: TaxDocu
           id={`doc-${doc.id}`}
           className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
             highlightId === doc.id
-              ? 'bg-teal-50 border-teal-300 shadow-sm'
+              ? 'bg-indigo-50 border-indigo-300 shadow-sm'
               : doc.status === 'flagged'
               ? 'bg-amber-50 border-amber-200'
               : 'bg-white border-slate-100'
@@ -404,7 +405,7 @@ export default function ReturnDetail() {
     return (
       <div className="p-6">
         <p className="text-slate-500">Return not found.</p>
-        <button onClick={() => navigate('/returns')} className="text-teal-600 mt-2 text-sm hover:underline">← Back</button>
+        <button onClick={() => navigate('/returns')} className="text-indigo-600 mt-2 text-sm hover:underline">← Back</button>
       </div>
     );
   }
@@ -497,7 +498,7 @@ export default function ReturnDetail() {
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <div className="flex items-center gap-2 mb-1 flex-wrap">
-              <h1 className="text-xl font-bold text-slate-800">{baseReturn.clientName}</h1>
+              <h1 className="text-2xl font-semibold tracking-tight text-slate-900">{baseReturn.clientName}</h1>
               <span className="text-sm text-slate-400">{baseReturn.type} · {baseReturn.year}</span>
               <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${sc.bg} ${sc.color}`}>
                 {role === 'client' ? sc.clientLabel : sc.cpaLabel}
@@ -541,7 +542,7 @@ export default function ReturnDetail() {
               key={t.id}
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-                tab === t.id ? 'border-teal-500 text-teal-700' : 'border-transparent text-slate-500 hover:text-slate-700'
+                tab === t.id ? 'border-indigo-500 text-indigo-700' : 'border-transparent text-slate-500 hover:text-slate-700'
               }`}
             >
               {t.label}
@@ -568,11 +569,14 @@ export default function ReturnDetail() {
                     <div className="mb-4 p-3 bg-slate-50 border border-slate-200 rounded-xl">
                       <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Field State Reference</p>
                       <div className="flex flex-wrap gap-2">
-                        {Object.entries(fieldStateConfig).map(([k, v]) => (
-                          <span key={k} className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${v.badgeBg} ${v.badge}`}>
-                            <span className="text-[10px]">{v.icon}</span> {v.label}
-                          </span>
-                        ))}
+                        {Object.entries(fieldStateConfig).map(([k, v]) => {
+                          const Icon = FIELD_STATE_ICONS[k as keyof typeof FIELD_STATE_ICONS];
+                          return (
+                            <span key={k} className={`inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md ${v.badgeBg} ${v.badge}`}>
+                              <Icon size={10} /> {v.label}
+                            </span>
+                          );
+                        })}
                       </div>
                       <p className="text-xs text-slate-400 mt-2">Click any field to trace its source document and AI reasoning.</p>
                     </div>
@@ -675,7 +679,7 @@ export default function ReturnDetail() {
           {undoFn && (
             <button
               onClick={() => { undoFn(); setToast(null); setUndoFn(null); }}
-              className="flex items-center gap-1 text-teal-300 hover:text-teal-200 font-semibold underline underline-offset-2"
+              className="flex items-center gap-1 text-indigo-300 hover:text-indigo-200 font-semibold underline underline-offset-2"
             >
               <Undo2 size={12} /> Undo
             </button>

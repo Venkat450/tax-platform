@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import { ReturnsDataProvider } from './context/ReturnsDataContext';
 import Layout from './components/Layout';
+import WelcomePage from './pages/WelcomePage';
 import Dashboard from './pages/Dashboard';
 import ReturnsList from './pages/ReturnsList';
 import ReturnDetail from './pages/ReturnDetail';
@@ -13,14 +14,22 @@ import SettingsPage from './pages/SettingsPage';
 import ReportsPage from './pages/ReportsPage';
 import Placeholder from './pages/Placeholder';
 
+function AppShell() {
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
+}
+
 export default function App() {
   return (
     <AppProvider>
       <ReturnsDataProvider>
         <BrowserRouter>
-          <Layout>
-            <Routes>
-              <Route path="/"              element={<Navigate to="/dashboard" replace />} />
+          <Routes>
+            <Route path="/" element={<WelcomePage />} />
+            <Route element={<AppShell />}>
               <Route path="/dashboard"     element={<Dashboard />} />
               <Route path="/returns"       element={<ReturnsList />} />
               <Route path="/returns/:id"   element={<ReturnDetail />} />
@@ -31,8 +40,8 @@ export default function App() {
               <Route path="/reports"       element={<ReportsPage />} />
               <Route path="/settings"      element={<SettingsPage />} />
               <Route path="/clients"       element={<Placeholder title="Clients" />} />
-            </Routes>
-          </Layout>
+            </Route>
+          </Routes>
         </BrowserRouter>
       </ReturnsDataProvider>
     </AppProvider>

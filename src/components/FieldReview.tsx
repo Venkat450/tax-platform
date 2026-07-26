@@ -23,10 +23,10 @@ export function DocExcerpt({ docType, src }: { docType: TaxDocument['type']; src
           <>
             <p>W-2 Wage and Tax Statement 2024</p>
             <p>Employer: ACME CORPORATION · EIN: 12-3456789</p>
-            <p className="mt-2">Box 1  {highlight}</p>
-            <p>Box 2  Federal income tax withheld: $14,200.00</p>
-            <p>Box 3  Social security wages: $85,000.00</p>
-            <p>Box 4  Social security tax withheld: $5,270.00</p>
+            <p className="mt-2">{src.section}: {highlight}</p>
+            <p>Box 2 — Federal income tax withheld: $14,200.00</p>
+            <p>Box 3 — Social security wages: $85,000.00</p>
+            <p>Box 4 — Social security tax withheld: $5,270.00</p>
           </>
         );
       case '1099-INT':
@@ -34,9 +34,9 @@ export function DocExcerpt({ docType, src }: { docType: TaxDocument['type']; src
           <>
             <p>1099-INT Interest Income 2024</p>
             <p>Payer: CHASE BANK · TIN: 91-1234567</p>
-            <p className="mt-2">Box 1  {highlight}</p>
-            <p>Box 2  Early withdrawal penalty: $0.00</p>
-            <p>Box 4  Federal tax withheld: $0.00</p>
+            <p className="mt-2">{src.section}: {highlight}</p>
+            <p>Box 2 — Early withdrawal penalty: $0.00</p>
+            <p>Box 4 — Federal tax withheld: $0.00</p>
           </>
         );
       case '1099-DIV':
@@ -45,9 +45,9 @@ export function DocExcerpt({ docType, src }: { docType: TaxDocument['type']; src
             <p>1099-DIV Dividends and Distributions 2024</p>
             <p>Payer: FIDELITY INVESTMENTS · TIN: 04-1234567</p>
             <p className="mt-2 text-slate-400 font-sans text-[10px] uppercase tracking-wider">Account 1 — Individual Brokerage</p>
-            <p>Box 1a  {highlight}</p>
+            <p>{src.section}: {highlight}</p>
             <p className="mt-2 text-slate-400 font-sans text-[10px] uppercase tracking-wider">Account 2 — Traditional IRA (excluded — not reportable on Sch. B)</p>
-            <p>Box 1a  $400.00</p>
+            <p>Box 1a — Total ordinary dividends: $400.00</p>
           </>
         );
       case '1098':
@@ -55,8 +55,8 @@ export function DocExcerpt({ docType, src }: { docType: TaxDocument['type']; src
           <>
             <p>1098 Mortgage Interest Statement 2024</p>
             <p>Lender: WELLS FARGO HOME MORTGAGE</p>
-            <p className="mt-2">Box 1  {highlight}</p>
-            <p>Box 6  Points / POS credit: $480.00</p>
+            <p className="mt-2">{src.section}: {highlight}</p>
+            <p>Box 6 — Points / POS credit: $480.00</p>
           </>
         );
       case 'Schedule-K1':
@@ -64,8 +64,8 @@ export function DocExcerpt({ docType, src }: { docType: TaxDocument['type']; src
           <>
             <p>Schedule K-1 (Form 1065) 2024</p>
             <p>Partnership: MITCHELL FAMILY LLC · EIN: 88-1234567</p>
-            <p>Item J  Partner's share of profit: 40.0000%</p>
-            <p className="mt-2">Part III, {src.section.split('—')[1]?.trim() ?? 'Line 1'}  {highlight}</p>
+            <p>Item J — Partner's share of profit: 40.0000%</p>
+            <p className="mt-2">{src.section}: {highlight}</p>
           </>
         );
       default:

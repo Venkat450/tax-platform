@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import {
   CheckCircle2, AlertTriangle, ChevronRight, FileText, MessageSquare, Send,
-  Eye, EyeOff, Clock, CheckCheck, ArrowLeft, Link2, Undo2,
+  Eye, EyeOff, Clock, CheckCheck, ArrowLeft, Link2, Undo2, X, ArrowUpRight,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { useReturnsData } from '../context/ReturnsDataContext';
@@ -12,7 +12,7 @@ import {
   allReturns, sampleReturn, alexPersonalReturn, stageConfig, STAGES, fieldStateConfig, urgencyConfig,
 } from '../data/mockData';
 import type { ReturnField, Thread, TaxDocument, Message, Role } from '../data/mockData';
-import { SourcePanel, FieldRow, OverrideModal, RejectModal } from '../components/FieldReview';
+import { SourcePanel, FieldRow, OverrideModal, RejectModal, DocExcerpt } from '../components/FieldReview';
 
 // ─── Status Pipeline ──────────────────────────────────────────────────────────
 
@@ -260,7 +260,10 @@ function CollabPanel({
 
 // ─── Document List ────────────────────────────────────────────────────────────
 
-function DocumentList({ documents, highlightId, blockers }: { documents: TaxDocument[]; highlightId?: string; blockers: string[] }) {
+function DocumentList({ documents, fields, highlightId, blockers, onOpenDoc }: {
+  documents: TaxDocument[]; fields: ReturnField[]; highlightId?: string; blockers: string[];
+  onOpenDoc: (doc: TaxDocument) => void;
+}) {
   const typeColors: Record<string, string> = {
     'W-2': 'bg-blue-100 text-blue-700', '1099-INT': 'bg-indigo-100 text-indigo-700',
     '1099-DIV': 'bg-violet-100 text-violet-700', '1098': 'bg-orange-100 text-orange-700',
@@ -296,15 +299,16 @@ function DocumentList({ documents, highlightId, blockers }: { documents: TaxDocu
         </div>
       ))}
       {documents.map(doc => (
-        <div
+        <button
           key={doc.id}
           id={`doc-${doc.id}`}
-          className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
+          onClick={() => onOpenDoc(doc)}
+          className={`w-full flex items-start gap-3 p-3 rounded-xl border transition-all text-left group ${
             highlightId === doc.id
               ? 'bg-indigo-50 border-indigo-300 shadow-sm'
               : doc.status === 'flagged'
-              ? 'bg-amber-50 border-amber-200'
-              : 'bg-white border-slate-100'
+              ? 'bg-amber-50 border-amber-200 hover:border-amber-300'
+              : 'bg-white border-slate-100 hover:border-slate-300 hover:shadow-sm'
           }`}
         >
           <div className="w-8 h-8 bg-white border border-slate-200 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -328,13 +332,71 @@ function DocumentList({ documents, highlightId, blockers }: { documents: TaxDocu
               {doc.status === 'flagged' && (
                 <span className="text-[10px] text-red-600 flex items-center gap-0.5"><AlertTriangle size={9} /> Flagged</span>
               )}
+              {fields.some(f => f.source?.docId === doc.id) && (
+                <span className="text-[10px] text-indigo-600 flex items-center gap-0.5 ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                  View <ArrowUpRight size={9} />
+                </span>
+              )}
             </div>
             {doc.flagNote && (
               <p className="text-xs text-amber-700 mt-1 leading-relaxed">{doc.flagNote}</p>
             )}
           </div>
-        </div>
+        </button>
       ))}
+    </div>
+  );
+}
+
+// ─── Document Viewer Modal ─────────────────────────────────────────────────────
+
+function DocumentViewerModal({ doc, fields, onClose, onGoToField }: {
+  doc: TaxDocument; fields: ReturnField[]; onClose: () => void; onGoToField: (fieldId: string) => void;
+}) {
+  const relatedFields = fields.filter(f => f.source?.docId === doc.id);
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="p-5 border-b border-slate-200 flex items-start justify-between gap-3 sticky top-0 bg-white">
+          <div>
+            <h3 className="font-semibold text-slate-800">{doc.name}</h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              {doc.type} · {doc.pages} page{doc.pages === 1 ? '' : 's'} · uploaded {doc.uploadedAt} by {doc.uploadedBy}
+            </p>
+          </div>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 flex-shrink-0"><X size={16} /></button>
+        </div>
+
+        {doc.flagNote && (
+          <div className="mx-5 mt-4 bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-700 flex items-start gap-2">
+            <AlertTriangle size={12} className="flex-shrink-0 mt-0.5" /> {doc.flagNote}
+          </div>
+        )}
+
+        <div className="p-5 space-y-4">
+          {relatedFields.length === 0 ? (
+            <p className="text-sm text-slate-400 text-center py-6">
+              No return field references this document yet — it hasn't been used in an extraction.
+            </p>
+          ) : relatedFields.map(f => (
+            <div key={f.id}>
+              <div className="flex items-center justify-between mb-1.5">
+                <p className="text-xs font-semibold text-slate-500">
+                  Used for Line {f.lineNumber} · {f.label}
+                </p>
+                <button
+                  onClick={() => onGoToField(f.id)}
+                  className="text-xs text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-0.5 flex-shrink-0"
+                >
+                  View field <ArrowUpRight size={11} />
+                </button>
+              </div>
+              {f.source && <DocExcerpt docType={doc.type} src={f.source} />}
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -364,6 +426,7 @@ export default function ReturnDetail() {
   const [highlightDocId, setHighlightDocId] = useState<string | undefined>(initialDoc);
   const [showOverrideModal, setShowOverrideModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [viewingDoc, setViewingDoc] = useState<TaxDocument | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [undoFn, setUndoFn] = useState<(() => void) | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -619,7 +682,13 @@ export default function ReturnDetail() {
           )}
 
           {tab === 'documents' && (
-            <DocumentList documents={baseReturn.documents} highlightId={highlightDocId} blockers={baseReturn.blockers} />
+            <DocumentList
+              documents={baseReturn.documents}
+              fields={fields}
+              highlightId={highlightDocId}
+              blockers={baseReturn.blockers}
+              onOpenDoc={setViewingDoc}
+            />
           )}
 
           {tab === 'messages' && (
@@ -669,6 +738,15 @@ export default function ReturnDetail() {
           field={selectedField}
           onClose={() => setShowRejectModal(false)}
           onSave={(reason) => handleReject(selectedField, reason)}
+        />
+      )}
+
+      {viewingDoc && (
+        <DocumentViewerModal
+          doc={viewingDoc}
+          fields={fields}
+          onClose={() => setViewingDoc(null)}
+          onGoToField={(fieldId) => { setViewingDoc(null); goToField(fieldId); }}
         />
       )}
 

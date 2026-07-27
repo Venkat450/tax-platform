@@ -5,7 +5,7 @@ import type { ReturnField, Thread, Message, Role, CorrectionEntry } from '../dat
 // every action on an AI-extracted field.
 export function permissionsFor(role: Role) {
   return {
-    canVerify:   ['cpa', 'reviewer', 'admin'].includes(role),  // ai_generated -> ai_verified
+    canVerify:   ['cpa', 'reviewer', 'admin', 'seasonal_staff'].includes(role),  // ai_generated -> ai_verified (seasonal staff can confirm obvious cases, but nothing more)
     canSignOff:  ['reviewer', 'admin'].includes(role),          // needs_approval -> ai_verified (senior sign-off only)
     canOverride: ['cpa', 'reviewer', 'admin'].includes(role),   // provide a corrected value
     canReject:   ['cpa', 'reviewer', 'admin'].includes(role),   // flag an AI value as wrong
